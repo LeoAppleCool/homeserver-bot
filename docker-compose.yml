@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  homeserver-bot:
+    build: .
+    container_name: homeserver-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Give the bot access to Docker on the host
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Persist message IDs across restarts
+      - ./data:/app/data
+    # Use host network so psutil reads host network stats correctly
+    network_mode: host
