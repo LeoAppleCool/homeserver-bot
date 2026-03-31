@@ -98,8 +98,11 @@ class Dashboard(commands.Cog):
                 msg = await channel.fetch_message(msg_id)
                 await msg.edit(embed=embed)
                 return
-            except (discord.NotFound, discord.HTTPException):
+            except discord.NotFound:
                 pass
+            except discord.HTTPException as e:
+                print(f"[dashboard] Edit failed (will retry): {e}")
+                return
 
         msg = await channel.send(embed=embed)
         set_message_id("status_message", msg.id)
