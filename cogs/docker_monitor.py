@@ -72,8 +72,11 @@ class DockerMonitor(commands.Cog):
                 msg = await channel.fetch_message(msg_id)
                 await msg.edit(embed=embed)
                 return
-            except (discord.NotFound, discord.HTTPException):
+            except discord.NotFound:
                 pass
+            except discord.HTTPException as e:
+                print(f"[docker_monitor] Edit failed (will retry): {e}")
+                return
 
         msg = await channel.send(embed=embed)
         set_message_id("docker_message", msg.id)
